@@ -128,15 +128,15 @@ int _tmain(int argc, _TCHAR* argv[])
 	//{
 	//	cout << topo_vertice[i] << " ";
 	//}
-	for (map<int, vector<int>>::iterator iter = vertice.begin(); iter != vertice.end(); iter++)
-	{
-		cout << iter->first << " ";
-		for (size_t i = 0; i < (iter->second).size(); i++)
-		{
-			cout << (iter->second)[i] << " ";
-		}
-		cout << endl;
-	}
+	//for (map<int, vector<int>>::iterator iter = vertice.begin(); iter != vertice.end(); iter++)
+	//{
+	//	cout << iter->first << " ";
+	//	for (size_t i = 0; i < (iter->second).size(); i++)
+	//	{
+	//		cout << (iter->second)[i] << " ";
+	//	}
+	//	cout << endl;
+	//}
 	int start_id, end_id;
 	import_demand_info("demand.csv", start_id, end_id, demand_vertice);
 	//cout << start_id << " " << end_id << endl;
@@ -144,8 +144,48 @@ int _tmain(int argc, _TCHAR* argv[])
 	//{
 	//	cout << demand_vertice[j] << " ";
 	//}
+	
+	// distance matrix representation
+	vector<int> dist; int inf = 99999999;
+	int vertice_num = topo_vertice.size();
+	for (int i = 0; i < vertice_num; i++)
+	{
+		for (int j = 0; j < vertice_num; j++)
+		{
+			if (i == j)
+				dist.push_back(0);
+			else
+				dist.push_back(inf);
+		}
+	}
+	for (size_t i = 0; i < edges.size(); i++)
+	{
+		int temp_a = edges[i].a; int temp_b = edges[i].b;
+		dist[temp_a*vertice_num + temp_b] = edges[i].value;
+	}
+	for (int i = 0; i < vertice_num*vertice_num; i++)
+	{
+		cout << dist[i] << " ";
+	}
+	cout << endl;
+	for (int k = 0; k < vertice_num; k++)
+	{
+		for (int i = 0; i < vertice_num; i++)
+		{
+			for (int j = 0; j < vertice_num; j++)
+			{
+				if (dist[i*vertice_num + j] > dist[i*vertice_num + k] + dist[k*vertice_num + j])
+				{
+					dist[i*vertice_num + j] = dist[i*vertice_num + k] + dist[k*vertice_num + j];
+				}
+			}
+		}
+	}
+	for (int i = 0; i < vertice_num*vertice_num; i++)
+	{
+		cout << dist[i] << " ";
+	}
 
-	//
 	getchar();
 	return 0;
 
